@@ -1,0 +1,13 @@
+[
+    {
+        "timestamp": 1774686785.440863,
+        "metric_vector": [
+            0.95,
+            5000.0,
+            95.0
+        ],
+        "anomaly_score": -0.35,
+        "source": "metrics",
+        "confidence": "high"
+    }
+]
