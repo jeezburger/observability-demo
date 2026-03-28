@@ -32,7 +32,11 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 # Serve frontend dashboard (must be mounted AFTER API routes below)
 # ---------------------------------------------------------------------------
-FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+
+
+FRONTEND_BASE = Path(__file__).resolve().parent.parent / "frontend-new"
+FRONTEND_DIR = FRONTEND_BASE / "dist" if (FRONTEND_BASE / "dist").is_dir() else FRONTEND_BASE
+
 
 # ---------------------------------------------------------------------------
 # In-memory storage
@@ -112,6 +116,12 @@ def get_status():
 # ---------------------------------------------------------------------------
 if FRONTEND_DIR.is_dir():
     app.mount("/", StaticFiles(directory=str(FRONTEND_DIR), html=True), name="frontend")
+
+
+else:
+    print(f"Warning: {FRONTEND_DIR} is not a directory. Dashboard UI will not be available.")
+
+
 
 
 # ---------------------------------------------------------------------------
