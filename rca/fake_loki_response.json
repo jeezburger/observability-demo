@@ -1,0 +1,68 @@
+{
+  "status": "success",
+  "data": {
+    "resultType": "streams",
+    "result": [
+      {
+        "stream": {
+          "container": "paymentservice",
+          "job": "observability-demo/paymentservice",
+          "namespace": "default",
+          "pod": "paymentservice-7d9e8f1a23-v5wxy",
+          "severity": "error"
+        },
+        "values": [
+          [
+            "1711636802856000000",
+            "2024-03-28T15:00:02.856Z ERROR paymentservice/charge.go:142 payment gateway timeout after 2000ms: context deadline exceeded"
+          ],
+          [
+            "1711636802100000000",
+            "2024-03-28T15:00:02.100Z ERROR paymentservice/charge.go:138 error connecting to payment gateway: dial tcp 10.96.45.12:443 i/o timeout"
+          ],
+          [
+            "1711636801500000000",
+            "2024-03-28T15:00:01.500Z ERROR paymentservice/health.go:28 payment gateway health check failed: connection refused"
+          ],
+          [
+            "1711636800900000000",
+            "2024-03-28T15:00:00.900Z ERROR paymentservice/charge.go:142 payment gateway timeout after 2000ms: context deadline exceeded"
+          ],
+          [
+            "1711636800300000000",
+            "2024-03-28T15:00:00.300Z ERROR paymentservice/retry.go:55 retry attempt 3/3 failed for payment gateway call: timeout"
+          ],
+          [
+            "1711636799700000000",
+            "2024-03-28T14:59:59.700Z ERROR paymentservice/charge.go:142 payment gateway timeout after 2000ms: context deadline exceeded"
+          ],
+          [
+            "1711636799100000000",
+            "2024-03-28T14:59:59.100Z ERROR paymentservice/circuit_breaker.go:89 circuit breaker OPEN for payment-gateway after 5 consecutive errors"
+          ],
+          [
+            "1711636798500000000",
+            "2024-03-28T14:59:58.500Z ERROR paymentservice/charge.go:142 payment gateway timeout after 2000ms: upstream connection timeout"
+          ],
+          [
+            "1711636797900000000",
+            "2024-03-28T14:59:57.900Z ERROR paymentservice/metrics.go:67 error rate exceeded threshold: payment_charge_errors_total=12 in last 60s"
+          ],
+          [
+            "1711636797300000000",
+            "2024-03-28T14:59:57.300Z ERROR paymentservice/charge.go:115 error processing charge request: payment gateway timeout after 2000ms"
+          ]
+        ]
+      }
+    ],
+    "stats": {
+      "summary": {
+        "bytesProcessedPerSecond": 1245678,
+        "linesProcessedPerSecond": 8934,
+        "totalBytesProcessed": 24576,
+        "totalLinesProcessed": 178,
+        "execTime": 0.019
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "data": [
+    {
+      "traceID": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+      "spans": [
+        {
+          "traceID": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+          "spanID": "1a2b3c4d5e6f7a8b",
+          "operationName": "/api/checkout",
+          "references": [],
+          "startTime": 1711636800000000,
+          "duration": 3245000,
+          "tags": [
+            { "key": "http.method", "type": "string", "value": "POST" },
+            { "key": "http.url", "type": "string", "value": "/api/checkout" },
+            { "key": "http.status_code", "type": "int64", "value": 500 },
+            { "key": "span.kind", "type": "string", "value": "server" }
+          ],
+          "logs": [],
+          "processID": "p1",
+          "warnings": null
+        },
+        {
+          "traceID": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+          "spanID": "2b3c4d5e6f7a8b9c",
+          "operationName": "CheckoutService/PlaceOrder",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+              "spanID": "1a2b3c4d5e6f7a8b"
+            }
+          ],
+          "startTime": 1711636800050000,
+          "duration": 3100000,
+          "tags": [
+            { "key": "http.method", "type": "string", "value": "POST" },
+            { "key": "http.status_code", "type": "int64", "value": 500 },
+            { "key": "error", "type": "bool", "value": true },
+            { "key": "span.kind", "type": "string", "value": "client" }
+          ],
+          "logs": [
+            {
+              "timestamp": 1711636803100000,
+              "fields": [
+                { "key": "event", "type": "string", "value": "error" },
+                { "key": "message", "type": "string", "value": "downstream service paymentservice returned error" }
+              ]
+            }
+          ],
+          "processID": "p2",
+          "warnings": null
+        },
+        {
+          "traceID": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+          "spanID": "3c4d5e6f7a8b9c0d",
+          "operationName": "PaymentService/Charge",
+          "references": [
+            {
+              "refType": "CHILD_OF",
+              "traceID": "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+              "spanID": "2b3c4d5e6f7a8b9c"
+            }
+          ],
+          "startTime": 1711636800100000,
+          "duration": 2756000,
+          "tags": [
+            { "key": "http.method", "type": "string", "value": "POST" },
+            { "key": "http.url", "type": "string", "value": "/charge" },
+            { "key": "http.status_code", "type": "int64", "value": 500 },
+            { "key": "error", "type": "bool", "value": true },
+            { "key": "otel.status_code", "type": "string", "value": "ERROR" },
+            { "key": "span.kind", "type": "string", "value": "server" }
+          ],
+          "logs": [
+            {
+              "timestamp": 1711636802856000,
+              "fields": [
+                { "key": "event", "type": "string", "value": "error" },
+                { "key": "message", "type": "string", "value": "payment gateway timeout after 2000ms" },
+                { "key": "error.kind", "type": "string", "value": "TimeoutError" }
+              ]
+            }
+          ],
+          "processID": "p3",
+          "warnings": null
+        }
+      ],
+      "processes": {
+        "p1": {
+          "serviceName": "frontend",
+          "tags": [
+            { "key": "hostname", "type": "string", "value": "frontend-6b4d77f8c9-xk2jr" },
+            { "key": "ip", "type": "string", "value": "10.244.0.12" }
+          ]
+        },
+        "p2": {
+          "serviceName": "checkoutservice",
+          "tags": [
+            { "key": "hostname", "type": "string", "value": "checkoutservice-5c8f9d6b47-m3nrt" },
+            { "key": "ip", "type": "string", "value": "10.244.0.18" }
+          ]
+        },
+        "p3": {
+          "serviceName": "paymentservice",
+          "tags": [
+            { "key": "hostname", "type": "string", "value": "paymentservice-7d9e8f1a23-v5wxy" },
+            { "key": "ip", "type": "string", "value": "10.244.0.24" }
+          ]
+        }
+      },
+      "warnings": null
+    }
+  ],
+  "total": 1,
+  "limit": 0,
+  "offset": 0,
+  "errors": null
+}
