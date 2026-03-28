@@ -1,0 +1,207 @@
+MEMBER 2 — Complete Guide
+Your Job in One Sentence
+You write the code that watches for problems. When something goes wrong, your code is the first to know.
+
+Step 1: Install Python
+On Windows:
+
+Go to python.org/downloads
+Click the big yellow Download button (get version 3.11 or newer)
+Open the downloaded file
+IMPORTANT: Before clicking Install, tick the box that says Add Python to PATH
+Click Install Now
+Wait for it to finish, click Close
+
+On Mac:
+
+Go to python.org/downloads
+Click Download Python 3.11
+Open the .pkg file
+Click Continue, Continue, Install
+Enter your Mac password if asked
+
+Test it worked:
+bashpython --version
+Should show Python 3.11.x
+
+Step 2: Install Your Python Packages
+Open Terminal, type these exactly:
+bashpip install scikit-learn requests prometheus_client python-dotenv numpy
+Press Enter. Wait for it all to install. You'll see a lot of text scrolling — that's normal.
+
+Step 3: Create Your Folder
+In Terminal, make sure you're in the observability-demo folder, then:
+bashmkdir detector
+cd detector
+```
+
+---
+
+## Step 4: Generate Your Code in Antigravity
+
+Open Antigravity IDE. Create a new file called `detector.py` inside the `detector` folder. Paste this prompt:
+```
+Write a complete Python 3.11 module called detector.py for a real-time 
+AI observability system. This is production quality code for a hackathon demo.
+
+The module watches for anomalies using two independent methods simultaneously.
+
+IMPORTS NEEDED:
+- threading, time, json, os, pickle, numpy, requests
+- from sklearn.ensemble import IsolationForest
+- from prometheus_client import Gauge, start_http_server
+- from dotenv import load_dotenv
+
+CONFIGURATION:
+Load these from a .env file using load_dotenv():
+- PROMETHEUS_URL (default: http://localhost:9090)
+- LOKI_URL (default: http://localhost:3100)
+
+FUNCTION 1 - get_prometheus_metrics():
+Query Prometheus HTTP API to get current values of these three metrics.
+For error rate: query = 'sum(rate(http_server_duration_milliseconds_count
+{http_status_code=~"5.."}[30s]))'
+For latency P99: query = 'histogram_quantile(0.99, 
+sum(rate(http_server_duration_milliseconds_bucket[30s])) by (le))'
+For CPU: query = 'avg(process_cpu_seconds_total)'
+Return a list of three floats. If any query fails or returns no data, 
+return [0.001, 50.0, 10.0] as safe defaults.
+The Prometheus query API endpoint is /api/v1/query with param q=
+
+FUNCTION 2 - get_loki_error_count():
+Query Loki API at /loki/api/v1/query with param:
+query = 'sum(count_over_time({job=~".+"} |= "error" [30s]))'
+Return the count as an integer. Return 0 if query fails.
+
+FUNCTION 3 - train_baseline():
+Print "Starting baseline collection - this takes 15 minutes"
+Collect metric vectors by calling get_prometheus_metrics() every 5 seconds
+for 15 minutes (180 samples total).
+Print progress every 60 seconds showing how many samples collected.
+Train IsolationForest with these exact parameters:
+  contamination=0.05, random_state=42, n_estimators=100
+Fit the model on the collected samples.
+Save the trained model to a file called baseline_model.pkl using pickle.
+Print "Baseline training complete - model saved"
+Return the trained model.
+
+FUNCTION 4 - load_or_train_model():
+If baseline_model.pkl exists in the current directory, load and return it.
+If it does not exist, call train_baseline() and return the result.
+
+ANOMALY SCORE GAUGE:
+Create a Prometheus Gauge called rca_anomaly_score with description
+"IsolationForest anomaly score - more negative means more anomalous"
+
+THREAD 1 - metric_watcher(model, on_anomaly, stop_event):
+This runs in a loop until stop_event is set.
+Every 5 seconds:
+  1. Call get_prometheus_metrics() to get current metrics
+  2. Score them: score = model.decision_function([metrics])[0]
+  3. Update the rca_anomaly_score gauge with this score
+  4. If score < -0.15:
+     - Print the anomaly score and metric values
+     - Call on_anomaly with a dictionary containing:
+       timestamp (float, current unix time),
+       metric_vector (the three floats),
+       anomaly_score (the score),
+       source ("metrics"),
+       confidence ("high" if score < -0.25 else "medium")
+  5. Sleep 5 seconds
+Wrap the entire loop body in try/except - print errors but never crash.
+
+THREAD 2 - log_watcher(on_anomaly, stop_event):
+Maintain a list called error_history that stores the last 20 error counts.
+This runs in a loop until stop_event is set.
+Every 3 seconds:
+  1. Call get_loki_error_count() 
+  2. Append result to error_history (keep only last 20 items)
+  3. If len(error_history) >= 5:
+     - Calculate mean and std of error_history
+     - If std > 0 and current count > mean + (3 * std):
+       - Print "Log anomaly detected: error count spike"
+       - Call on_anomaly with dictionary containing:
+         timestamp (float, current unix time),
+         log_error_count (the current count),
+         anomaly_score (0.0),
+         source ("logs"),
+         confidence ("medium")
+  4. Sleep 3 seconds
+Wrap the entire loop body in try/except - print errors but never crash.
+
+DEDUPLICATION:
+Keep a variable called last_anomaly_time initialised to 0.
+Before calling on_anomaly in either thread, check if current time minus
+last_anomaly_time is less than 10 seconds. If so, skip the callback.
+If both threads would fire within 10 seconds, the second one is skipped.
+When calling on_anomaly, update last_anomaly_time to current time.
+Use a threading.Lock() to make last_anomaly_time thread-safe.
+
+MAIN FUNCTION - start(on_anomaly_callback):
+1. Call load_dotenv()
+2. Start the Prometheus metrics server on port 8001 using start_http_server(8001)
+3. Call load_or_train_model() to get the IsolationForest model
+4. Create a threading.Event() called stop_event
+5. Create and start Thread 1 (metric_watcher) as a daemon thread
+6. Create and start Thread 2 (log_watcher) as a daemon thread
+7. Print "Detector running - watching for anomalies..."
+8. Return stop_event so the caller can stop the detector if needed
+
+TEST BLOCK at the bottom:
+if __name__ == "__main__":
+    def test_callback(event):
+        print("ANOMALY DETECTED:")
+        print(json.dumps(event, indent=2))
+    
+    stop = start(test_callback)
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        stop.set()
+        print("Detector stopped")
+
+Make the code clean, well-commented, and production quality.
+```
+
+---
+
+## Step 5: Create a Requirements File
+
+Create a new file called `requirements.txt` in the `detector` folder. In Antigravity:
+```
+Create a pip requirements.txt file listing these packages with no version 
+pinning: scikit-learn, requests, prometheus_client, python-dotenv, numpy
+```
+
+---
+
+## Step 6: Test Your Code Without Live Data
+
+You don't need Member 1's stack to test your logic. Create a test file called `test_detector.py` in your `detector` folder. In Antigravity:
+```
+Write a Python test script called test_detector.py that tests the 
+detector module without needing real Prometheus or Loki running.
+
+Use unittest.mock to patch the get_prometheus_metrics function to 
+return [0.001, 45.0, 12.0] for normal readings (20 times) and then
+[0.52, 2100.0, 78.0] for anomaly readings (5 times).
+
+Also patch get_loki_error_count to return 2 for normal and 50 for anomaly.
+
+Verify that:
+1. The IsolationForest trains successfully on the normal data
+2. The anomaly callback fires when anomaly data is fed in
+3. The callback receives a dictionary with timestamp, metric_vector, 
+   anomaly_score, source, and confidence keys
+
+Print PASS or FAIL for each test.
+Run it:
+bashpython test_detector.py
+When it prints PASS for all tests, your code is correct.
+
+Step 7: Push to GitHub
+bashcd ..
+git add .
+git commit -m "Member 2: detector.py complete and tested"
+git push

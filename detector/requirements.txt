@@ -1,0 +1,5 @@
+scikit-learn
+requests
+prometheus_client
+python-dotenv
+numpy
