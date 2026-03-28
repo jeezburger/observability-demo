@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>JAEGERBOMB | Active Alerts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant":"#3b4a3e","tertiary-fixed":"#ffdad7","on-surface-variant":"#bacbbb",
+              "surface-bright":"#353940","outline":"#859586","on-primary-fixed":"#00210d",
+              "surface-container-lowest":"#0a0e14","primary":"#81ffac",
+              "on-primary-fixed-variant":"#00522a","on-tertiary-fixed":"#410005",
+              "surface-container":"#1c2026","primary-fixed-dim":"#0fe380",
+              "on-tertiary-container":"#ad001d","tertiary-fixed-dim":"#ffb3af",
+              "surface-tint":"#0fe380","surface":"#10141a","surface-dim":"#10141a",
+              "surface-container-highest":"#31353c","on-background":"#dfe2eb",
+              "surface-container-low":"#181c22","error":"#ffb4ab","on-surface":"#dfe2eb",
+              "on-error":"#690005","on-secondary-fixed":"#001f23",
+              "on-secondary-container":"#002f34","inverse-surface":"#dfe2eb",
+              "secondary-container":"#2c9eac","on-error-container":"#ffdad6",
+              "inverse-primary":"#006d3a","secondary-fixed-dim":"#6ed5e3",
+              "surface-variant":"#31353c","on-tertiary":"#68000d",
+              "surface-container-high":"#262a31","on-tertiary-fixed-variant":"#930017",
+              "on-primary-container":"#006233","on-primary":"#00391b",
+              "error-container":"#93000a","tertiary-container":"#ffb8b4",
+              "on-secondary-fixed-variant":"#004f57","tertiary":"#ffdedc",
+              "secondary-fixed":"#90f1ff","background":"#10141a","secondary":"#6ed5e3",
+              "primary-fixed":"#5dff9e","on-secondary":"#00363c",
+              "inverse-on-surface":"#2d3137","primary-container":"#1ce783"
+            },
+            fontFamily: {"headline":["Inter"],"body":["Inter"],"label":["Inter"],"mono":["Geist Mono"]},
+            borderRadius: {"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        body { font-family: 'Inter', sans-serif; }
+        .data-font { font-family: 'Geist Mono', monospace; }
+        .editorial-grid { display: grid; grid-template-columns: 1fr 420px; gap: 1.5rem; }
+        @media (max-width: 1024px) { .editorial-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body class="min-h-screen bg-background text-on-surface">
+
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#181c22] border-none flex justify-between items-center px-6 py-3 max-w-none">
+<div class="flex items-center gap-8">
+<a href="index.html" class="text-xl font-black tracking-tighter text-[#1ce783] hover:opacity-80 transition-opacity">JAEGERBOMB</a>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-xs font-medium uppercase tracking-wider" href="index.html">Dashboard</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-xs font-medium uppercase tracking-wider" href="nodes.html">Nodes</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-xs font-medium uppercase tracking-wider" href="logs.html">Logs</a>
+<a class="text-[#1ce783] border-b-2 border-[#1ce783] pb-1 text-xs font-medium uppercase tracking-wider" href="alerts.html">Alerts</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-[#10141a] border-none text-xs rounded px-4 py-1.5 w-64 focus:ring-1 focus:ring-[#1ce783] text-slate-300" placeholder="Search incidents..." type="text">
+<span class="material-symbols-outlined absolute right-2 top-1.5 text-slate-500 text-sm">search</span>
+</div>
+<button class="hover:bg-[#262a31] p-1.5 rounded-md transition-all duration-200"><span class="material-symbols-outlined text-slate-400">settings</span></button>
+<button class="hover:bg-[#262a31] p-1.5 rounded-md transition-all duration-200"><span class="material-symbols-outlined text-slate-400">account_circle</span></button>
+</div>
+</header>
+
+<main class="pt-20 pb-16 px-6 max-w-[1600px] mx-auto">
+<!-- Header -->
+<div class="mb-8 flex justify-between items-end">
+<div>
+<h1 class="text-2xl font-bold tracking-tight mb-1">Active Incidents</h1>
+<p class="text-slate-400 text-sm">Monitoring 12 Node Cluster across North America &amp; EU-West</p>
+</div>
+<div class="flex gap-3">
+<div class="bg-surface-container-low px-4 py-2 flex items-center gap-3">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Live Feedback</span>
+<div class="flex gap-1">
+<div class="w-1.5 h-1.5 bg-primary rounded-full animate-pulse"></div>
+<div class="w-1.5 h-1.5 bg-primary rounded-full opacity-40"></div>
+<div class="w-1.5 h-1.5 bg-primary rounded-full opacity-20"></div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="editorial-grid">
+<!-- Left Column: Incident List -->
+<div class="flex flex-col gap-4" id="incident-list">
+<!-- Static incidents -->
+<div class="bg-surface-container-low p-5 hover:bg-surface-container transition-all cursor-pointer border-l-4 border-error group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="bg-error-container text-error text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">Critical</span>
+<span class="data-font text-xs text-slate-500">ID: INC-9021</span>
+</div>
+<span class="data-font text-xs text-slate-400">02:14:55 UTC</span>
+</div>
+<h3 class="text-lg font-bold mb-2 group-hover:text-primary transition-colors">High Latency Spikes: Production-DB-01</h3>
+<p class="text-sm text-slate-400 mb-4 line-clamp-2">Database cluster 'prod-db-us-east' is reporting p99 latency above 450ms. Transactional throughput dropped by 22% in the last 4 minutes.</p>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-slate-500">dns</span><span class="data-font text-xs text-slate-300">us-east-cluster</span></div>
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-slate-500">monitoring</span><span class="data-font text-xs text-slate-300">latency_p99 &gt; 450ms</span></div>
+</div>
+</div>
+
+<div class="bg-surface-container-low p-5 hover:bg-surface-container transition-all cursor-pointer border-l-4 border-secondary-container">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="bg-secondary-container/20 text-secondary-container text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">High</span>
+<span class="data-font text-xs text-slate-500">ID: INC-8842</span>
+</div>
+<span class="data-font text-xs text-slate-400">02:11:10 UTC</span>
+</div>
+<h3 class="text-lg font-bold mb-2">Memory Exhaustion Warning: Auth-Service</h3>
+<p class="text-sm text-slate-400 mb-4 line-clamp-2">Service 'auth-provider' memory usage is currently at 89%. Garbage collection cycles are increasing in frequency.</p>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-slate-500">lan</span><span class="data-font text-xs text-slate-300">k8s-main-node-04</span></div>
+</div>
+</div>
+
+<div class="bg-surface-container-low p-5 hover:bg-surface-container transition-all cursor-pointer border-l-4 border-outline">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<span class="bg-surface-container-highest text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">Medium</span>
+<span class="data-font text-xs text-slate-500">ID: INC-8839</span>
+</div>
+<span class="data-font text-xs text-slate-400">01:58:33 UTC</span>
+</div>
+<h3 class="text-lg font-bold mb-2">Unusual Traffic Pattern: API-Gateway</h3>
+<p class="text-sm text-slate-400 mb-4 line-clamp-2">Inbound traffic from subnet 192.168.1.0/24 is 3x higher than historical baseline.</p>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2"><span class="material-symbols-outlined text-sm text-slate-500">router</span><span class="data-font text-xs text-slate-300">edge-gateway-01</span></div>
+</div>
+</div>
+
+<!-- Live incidents from status API -->
+<div id="live-incidents"></div>
+</div>
+
+<!-- Right Column: Detail Panel -->
+<div class="relative">
+<div class="sticky top-20 flex flex-col gap-6">
+<div class="bg-surface-container-high rounded-lg overflow-hidden border border-outline-variant/30">
+<div class="p-6 bg-surface-container-highest/40 border-b border-outline-variant/20">
+<h2 class="font-bold text-xl mb-1">Incident Detail</h2>
+<p class="data-font text-xs text-primary" id="detail-incident-id">INC-9021 • ACTIVE INVESTIGATION</p>
+</div>
+<div class="p-6 space-y-8">
+<!-- Metrics Spark -->
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="text-xs font-bold uppercase tracking-widest text-slate-500">Telemetry Stream</span>
+<span class="data-font text-xs text-error" id="detail-metric">452ms AVG</span>
+</div>
+<div class="h-16 w-full bg-surface-container-lowest relative flex items-end gap-1 px-2 py-1">
+<div class="flex-1 bg-primary/20 h-4"></div><div class="flex-1 bg-primary/20 h-6"></div>
+<div class="flex-1 bg-primary/20 h-5"></div><div class="flex-1 bg-primary/20 h-8"></div>
+<div class="flex-1 bg-primary/20 h-7"></div><div class="flex-1 bg-error/40 h-10"></div>
+<div class="flex-1 bg-error h-12"></div><div class="flex-1 bg-error h-14"></div>
+<div class="flex-1 bg-error/80 h-11"></div>
+</div>
+</div>
+
+<!-- AI Recommendation -->
+<div class="bg-primary/5 border border-primary/20 p-5 rounded-md relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-primary/30 text-4xl" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<h4 class="text-primary font-bold text-sm uppercase tracking-widest mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+AutoPilot Recommendation
+</h4>
+<p class="text-sm leading-relaxed text-slate-300 mb-6" id="ai-recommendation">
+Root cause identified as <span class="data-font text-primary">connection_pool_exhaustion</span> in the 'read-replica-set'. AI recommends scaling the pool capacity by 40% and forcing a re-balance of persistent connections.
+</p>
+<div class="flex flex-col gap-3">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-bold py-3 rounded-md flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all" id="btn-execute-fix" onclick="executeAutoFix()">
+<span class="material-symbols-outlined">bolt</span>
+EXECUTE AUTO-FIX
+</button>
+<button class="w-full bg-surface-container-highest text-slate-300 font-bold py-3 rounded-md border border-outline-variant/50 hover:bg-surface-bright transition-colors text-xs uppercase tracking-widest">
+Dismiss Recommendation
+</button>
+</div>
+</div>
+
+<!-- Logs Snippet -->
+<div>
+<h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3">Recent Logs</h4>
+<div class="bg-surface-container-lowest p-3 rounded data-font text-[10px] space-y-1 text-slate-400 overflow-x-auto whitespace-nowrap" id="detail-logs">
+<div>[02:14:55] <span class="text-error">ERROR</span> pool.TimeoutException: 30s</div>
+<div>[02:14:52] <span class="text-secondary">WARN</span> Reached max-connections (100)</div>
+<div>[02:14:48] <span class="text-slate-500">INFO</span> Heartbeat check stable</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Related Services -->
+<div class="bg-surface-container-low p-4 rounded-md">
+<h4 class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4">Affected Dependencies</h4>
+<div class="flex flex-wrap gap-2" id="affected-deps">
+<span class="px-2 py-1 bg-surface-container-highest text-xs text-slate-300 rounded">checkout-service</span>
+<span class="px-2 py-1 bg-surface-container-highest text-xs text-slate-300 rounded">billing-api</span>
+<span class="px-2 py-1 bg-surface-container-highest text-xs text-slate-300 rounded">inventory-v2</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full h-10 bg-[#10141a] flex justify-start items-center px-6 gap-8 z-50">
+<div class="flex flex-row items-center gap-2 bg-[#262a31] text-[#1ce783] rounded-md px-3 py-1" id="footer-system-badge">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="data-font text-[10px] font-semibold uppercase">System OK</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default transition-all">
+<span class="material-symbols-outlined text-sm">speed</span>
+<span class="data-font text-[10px] font-semibold uppercase">Latency: 24ms</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default transition-all">
+<span class="material-symbols-outlined text-sm">dns</span>
+<span class="data-font text-[10px] font-semibold uppercase">12 Node Cluster</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default transition-all" id="connection-status">
+<span class="material-symbols-outlined text-sm">lan</span>
+<span class="data-font text-[10px] font-semibold uppercase">Connected</span>
+</div>
+</footer>
+
+<script>
+    const STATUS_API = 'http://localhost:8090';
+
+    // Execute auto-fix via status API event
+    async function executeAutoFix() {
+        const btn = document.getElementById('btn-execute-fix');
+        btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> EXECUTING...';
+        btn.disabled = true;
+
+        try {
+            await fetch(`${STATUS_API}/event`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    event_type: 'remediation_complete',
+                    data: { action_taken: 'auto_fix', service: 'prod-db-us-east', recovered: true, source: 'dashboard' }
+                })
+            });
+            btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> FIX DISPATCHED';
+            btn.className = btn.className.replace('from-primary to-primary-container', 'from-green-700 to-green-900');
+        } catch {
+            btn.innerHTML = '<span class="material-symbols-outlined">error</span> DISPATCH FAILED';
+        }
+    }
+
+    // Poll for live incidents
+    async function pollAlerts() {
+        const conn = document.getElementById('connection-status');
+        const footer = document.getElementById('footer-system-badge');
+        try {
+            const res = await fetch(`${STATUS_API}/status`);
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            conn.innerHTML = `<span class="material-symbols-outlined text-sm">lan</span><span class="data-font text-[10px] font-semibold uppercase">Connected</span>`;
+            conn.className = 'flex flex-row items-center gap-2 text-[#81ffac] px-3 py-1 cursor-default transition-all';
+
+            if (!data.system_healthy) {
+                footer.innerHTML = `<span class="material-symbols-outlined text-sm">warning</span><span class="data-font text-[10px] font-semibold uppercase">Anomaly Active</span>`;
+                footer.className = 'flex flex-row items-center gap-2 bg-error-container text-error rounded-md px-3 py-1';
+            } else {
+                footer.innerHTML = `<span class="material-symbols-outlined text-sm">check_circle</span><span class="data-font text-[10px] font-semibold uppercase">System OK</span>`;
+                footer.className = 'flex flex-row items-center gap-2 bg-[#262a31] text-[#1ce783] rounded-md px-3 py-1';
+            }
+
+            // Inject live anomaly events as incident cards
+            const anomalies = (data.recent_events || []).filter(e => e.event_type === 'anomaly_detected');
+            const container = document.getElementById('live-incidents');
+            container.innerHTML = anomalies.map((a, i) => {
+                const t = new Date(a.timestamp * 1000).toLocaleTimeString('en-GB', {hour12:false});
+                return `<div class="bg-surface-container-low p-5 hover:bg-surface-container transition-all cursor-pointer border-l-4 border-error group animate-pulse">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-error-container text-error text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-tighter">Live</span>
+                            <span class="data-font text-xs text-slate-500">AI-RCA</span>
+                        </div>
+                        <span class="data-font text-xs text-slate-400">${t}</span>
+                    </div>
+                    <h3 class="text-lg font-bold mb-2 text-error">${a.data?.root_cause || 'Unknown Anomaly'}</h3>
+                    <p class="text-sm text-slate-400 mb-4">Affected: ${a.data?.affected_service || '—'} | Severity: ${a.data?.severity || '—'}</p>
+                </div>`;
+            }).join('');
+
+            // Update AI recommendation with latest RCA
+            const rca = data.last_rca_result || {};
+            if (rca.root_cause) {
+                document.getElementById('ai-recommendation').innerHTML = `
+                    Root cause identified as <span class="data-font text-primary">${rca.root_cause}</span>
+                    affecting service <span class="data-font text-primary">${rca.affected_service || '—'}</span>.
+                    AI recommends: <span class="data-font text-primary">${rca.remediation_action || 'restart_service'}</span>.
+                    Confidence: ${rca.confidence ? (rca.confidence * 100).toFixed(1) + '%' : '—'}`;
+            }
+
+            // Update detail logs with recent events
+            const recentLogs = (data.recent_events || []).slice(-5);
+            if (recentLogs.length > 0) {
+                document.getElementById('detail-logs').innerHTML = recentLogs.map(e => {
+                    const t = new Date(e.timestamp * 1000).toLocaleTimeString('en-GB', {hour12:false});
+                    const cls = e.event_type === 'anomaly_detected' ? 'text-error' : 'text-primary';
+                    return `<div>[${t}] <span class="${cls}">${e.event_type.toUpperCase()}</span> ${e.data?.root_cause || e.data?.action_taken || e.event_type}</div>`;
+                }).join('');
+            }
+        } catch {
+            conn.innerHTML = `<span class="material-symbols-outlined text-sm">lan</span><span class="data-font text-[10px] font-semibold uppercase">Disconnected</span>`;
+            conn.className = 'flex flex-row items-center gap-2 text-error px-3 py-1 cursor-default transition-all';
+        }
+    }
+    setInterval(pollAlerts, 2500);
+    pollAlerts();
+</script>
+</body></html>

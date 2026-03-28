@@ -1,0 +1,343 @@
+{
+    "dashboard": {
+        "id": null,
+        "uid": "ai-observability-rca-demo",
+        "title": "AI Observability - RCA Demo",
+        "description": "Real-time AI-powered Root Cause Analysis and Remediation dashboard",
+        "tags": [
+            "ai",
+            "observability",
+            "rca",
+            "demo"
+        ],
+        "style": "dark",
+        "timezone": "browser",
+        "editable": true,
+        "graphTooltip": 1,
+        "refresh": "5s",
+        "time": {
+            "from": "now-15m",
+            "to": "now"
+        },
+        "timepicker": {
+            "refresh_intervals": [
+                "5s",
+                "10s",
+                "30s",
+                "1m",
+                "5m"
+            ]
+        },
+        "annotations": {
+            "list": [
+                {
+                    "builtIn": 1,
+                    "datasource": {
+                        "type": "grafana",
+                        "uid": "-- Grafana --"
+                    },
+                    "enable": true,
+                    "hide": false,
+                    "iconColor": "rgba(255, 96, 96, 1)",
+                    "name": "Annotations & Alerts",
+                    "type": "dashboard"
+                }
+            ]
+        },
+        "panels": [
+            {
+                "id": 1,
+                "title": "Service Error Rate",
+                "type": "timeseries",
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 0
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                },
+                "targets": [
+                    {
+                        "refId": "A",
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "prometheus"
+                        },
+                        "expr": "sum(rate(http_server_duration_milliseconds_count{http_status_code=~\"5..\"}[30s])) by (service_name)",
+                        "legendFormat": "{{service_name}}",
+                        "interval": "",
+                        "exemplar": false
+                    }
+                ],
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "axisLabel": "Errors/sec",
+                            "axisPlacement": "auto",
+                            "drawStyle": "line",
+                            "fillOpacity": 15,
+                            "gradientMode": "scheme",
+                            "lineInterpolation": "smooth",
+                            "lineWidth": 2,
+                            "pointSize": 5,
+                            "showPoints": "auto",
+                            "spanNulls": false,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "none"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "line"
+                            }
+                        },
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": 0.1
+                                }
+                            ]
+                        },
+                        "unit": "short"
+                    },
+                    "overrides": [
+                        {
+                            "matcher": {
+                                "id": "byFrameRefID",
+                                "options": "A"
+                            },
+                            "properties": [
+                                {
+                                    "id": "color",
+                                    "value": {
+                                        "fixedColor": "red",
+                                        "mode": "fixed"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                },
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltip": {
+                        "mode": "multi",
+                        "sort": "desc"
+                    }
+                }
+            },
+            {
+                "id": 2,
+                "title": "Anomaly Score",
+                "type": "timeseries",
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 0
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                },
+                "targets": [
+                    {
+                        "refId": "A",
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "prometheus"
+                        },
+                        "expr": "rca_anomaly_score",
+                        "legendFormat": "Anomaly Score",
+                        "interval": "",
+                        "exemplar": false
+                    }
+                ],
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "orange",
+                            "mode": "fixed"
+                        },
+                        "custom": {
+                            "axisLabel": "Anomaly Score (more negative = worse)",
+                            "axisPlacement": "auto",
+                            "drawStyle": "line",
+                            "fillOpacity": 10,
+                            "gradientMode": "scheme",
+                            "lineInterpolation": "smooth",
+                            "lineWidth": 2,
+                            "pointSize": 5,
+                            "showPoints": "auto",
+                            "spanNulls": false,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "none"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "line+area"
+                            }
+                        },
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "transparent",
+                                    "value": null
+                                },
+                                {
+                                    "color": "red",
+                                    "value": -0.15
+                                }
+                            ]
+                        },
+                        "unit": "short"
+                    },
+                    "overrides": []
+                },
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                    }
+                }
+            },
+            {
+                "id": 3,
+                "title": "RCA Event Feed",
+                "type": "logs",
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 8
+                },
+                "datasource": {
+                    "type": "loki",
+                    "uid": "loki"
+                },
+                "targets": [
+                    {
+                        "refId": "A",
+                        "datasource": {
+                            "type": "loki",
+                            "uid": "loki"
+                        },
+                        "expr": "{job=\"rca-engine\"}",
+                        "queryType": "range"
+                    }
+                ],
+                "options": {
+                    "showTime": true,
+                    "showLabels": false,
+                    "showCommonLabels": false,
+                    "wrapLogMessage": true,
+                    "prettifyLogMessage": false,
+                    "enableLogDetails": true,
+                    "sortOrder": "Descending",
+                    "dedupStrategy": "none"
+                }
+            },
+            {
+                "id": 4,
+                "title": "Remediation Timeline",
+                "type": "timeseries",
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 12,
+                    "y": 8
+                },
+                "datasource": {
+                    "type": "prometheus",
+                    "uid": "prometheus"
+                },
+                "targets": [
+                    {
+                        "refId": "A",
+                        "datasource": {
+                            "type": "prometheus",
+                            "uid": "prometheus"
+                        },
+                        "expr": "rca_anomaly_score",
+                        "legendFormat": "Anomaly Score",
+                        "interval": "",
+                        "exemplar": false
+                    }
+                ],
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "fixedColor": "semi-dark-blue",
+                            "mode": "fixed"
+                        },
+                        "custom": {
+                            "axisLabel": "",
+                            "axisPlacement": "auto",
+                            "drawStyle": "line",
+                            "fillOpacity": 10,
+                            "gradientMode": "scheme",
+                            "lineInterpolation": "smooth",
+                            "lineWidth": 2,
+                            "pointSize": 5,
+                            "showPoints": "auto",
+                            "spanNulls": false,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "none"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "off"
+                            }
+                        },
+                        "thresholds": {
+                            "mode": "absolute",
+                            "steps": [
+                                {
+                                    "color": "green",
+                                    "value": null
+                                }
+                            ]
+                        },
+                        "unit": "short"
+                    },
+                    "overrides": []
+                },
+                "options": {
+                    "legend": {
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": true
+                    },
+                    "tooltip": {
+                        "mode": "single",
+                        "sort": "none"
+                    }
+                }
+            }
+        ],
+        "schemaVersion": 39,
+        "version": 1
+    },
+    "overwrite": true
+}

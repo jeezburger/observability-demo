@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>JAEGERBOMB | Live Logs</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "outline-variant":"#3b4a3e","tertiary-fixed":"#ffdad7","on-surface-variant":"#bacbbb",
+              "surface-bright":"#353940","outline":"#859586","on-primary-fixed":"#00210d",
+              "surface-container-lowest":"#0a0e14","primary":"#81ffac",
+              "on-primary-fixed-variant":"#00522a","on-tertiary-fixed":"#410005",
+              "surface-container":"#1c2026","primary-fixed-dim":"#0fe380",
+              "on-tertiary-container":"#ad001d","tertiary-fixed-dim":"#ffb3af",
+              "surface-tint":"#0fe380","surface":"#10141a","surface-dim":"#10141a",
+              "surface-container-highest":"#31353c","on-background":"#dfe2eb",
+              "surface-container-low":"#181c22","error":"#ffb4ab","on-surface":"#dfe2eb",
+              "on-error":"#690005","on-secondary-fixed":"#001f23",
+              "on-secondary-container":"#002f34","inverse-surface":"#dfe2eb",
+              "secondary-container":"#2c9eac","on-error-container":"#ffdad6",
+              "inverse-primary":"#006d3a","secondary-fixed-dim":"#6ed5e3",
+              "surface-variant":"#31353c","on-tertiary":"#68000d",
+              "surface-container-high":"#262a31","on-tertiary-fixed-variant":"#930017",
+              "on-primary-container":"#006233","on-primary":"#00391b",
+              "error-container":"#93000a","tertiary-container":"#ffb8b4",
+              "on-secondary-fixed-variant":"#004f57","tertiary":"#ffdedc",
+              "secondary-fixed":"#90f1ff","background":"#10141a","secondary":"#6ed5e3",
+              "primary-fixed":"#5dff9e","on-secondary":"#00363c",
+              "inverse-on-surface":"#2d3137","primary-container":"#1ce783"
+            },
+            fontFamily: {"headline":["Inter"],"body":["Inter"],"label":["Inter"],"mono":["Geist Mono"]},
+            borderRadius: {"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block; line-height: 1;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #10141a; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #262a31; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #31353c; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary selection:text-on-primary">
+
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#181c22] border-none flex justify-between items-center px-6 py-3 max-w-none">
+<div class="flex items-center gap-8">
+<a href="index.html" class="text-xl font-black tracking-tighter text-[#1ce783] hover:opacity-80 transition-opacity">JAEGERBOMB</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-xs font-medium uppercase tracking-wider text-slate-400 hover:text-slate-200 transition-colors" href="index.html">Dashboard</a>
+<a class="text-xs font-medium uppercase tracking-wider text-slate-400 hover:text-slate-200 transition-colors" href="nodes.html">Nodes</a>
+<a class="text-xs font-medium uppercase tracking-wider text-[#1ce783] border-b-2 border-[#1ce783] pb-1" href="logs.html">Logs</a>
+<a class="text-xs font-medium uppercase tracking-wider text-slate-400 hover:text-slate-200 transition-colors" href="alerts.html">Alerts</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined text-slate-400 p-2 rounded-md hover:bg-[#262a31] transition-all duration-200 cursor-pointer">search</span>
+</div>
+<span class="material-symbols-outlined text-slate-400 p-2 rounded-md hover:bg-[#262a31] transition-all duration-200 cursor-pointer">settings</span>
+<span class="material-symbols-outlined text-slate-400 p-2 rounded-md hover:bg-[#262a31] transition-all duration-200 cursor-pointer">account_circle</span>
+</div>
+</header>
+
+<!-- Main Content -->
+<main class="pt-16 pb-12 min-h-screen flex flex-col">
+<!-- Control Strip -->
+<div class="bg-surface-container-low px-6 py-3 flex flex-wrap items-center justify-between gap-4 border-b border-outline-variant/10">
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-surface-container-lowest rounded px-3 py-1.5 border border-outline-variant/20">
+<span class="material-symbols-outlined text-xs text-outline mr-2">filter_alt</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm font-mono w-64 placeholder:text-outline/50" placeholder='Filter stream (e.g. service:auth)...' type="text">
+</div>
+<div class="flex gap-1">
+<button class="px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest bg-error-container text-on-error-container hover:opacity-90 transition-opacity">Error</button>
+<button class="px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest bg-secondary-container text-on-secondary-container hover:opacity-90 transition-opacity">Warn</button>
+<button class="px-3 py-1 rounded text-[10px] font-bold uppercase tracking-widest bg-surface-container-highest text-on-surface-variant hover:text-on-surface transition-colors">Info</button>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 text-[10px] font-mono text-outline uppercase tracking-tighter">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Live Streaming
+                </div>
+<button class="flex items-center gap-2 px-4 py-1.5 bg-primary-container text-on-primary-container rounded-md font-bold text-xs uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined text-sm">pause</span>
+                    Pause
+                </button>
+</div>
+</div>
+
+<!-- Terminal View -->
+<section class="flex-grow bg-surface-container-lowest overflow-hidden flex flex-col">
+<div class="flex-grow overflow-y-auto custom-scrollbar font-mono text-sm leading-relaxed p-6 selection:bg-primary/30" id="log-stream">
+<!-- Static log entries -->
+<div class="flex group hover:bg-surface-container-low transition-colors py-1 px-2 rounded -mx-2">
+<span class="text-outline/40 w-12 shrink-0 select-none">1021</span>
+<span class="text-secondary/60 w-32 shrink-0 select-none">2023-10-27 14:02:11</span>
+<span class="text-primary w-16 shrink-0 font-bold">INFO</span>
+<div class="flex-grow text-on-surface/90">
+<span class="text-primary-fixed-dim">service</span>: "gateway-proxy" |
+<span class="text-primary-fixed-dim">event</span>: "request_started" |
+<span class="text-primary-fixed-dim">trace_id</span>: "4f2a92c1"
+</div>
+</div>
+<!-- JSON Expanded -->
+<div class="flex flex-col group py-1 px-2 rounded -mx-2 bg-surface-container-low/30 border-l-2 border-primary">
+<div class="flex">
+<span class="text-outline/40 w-12 shrink-0 select-none">1022</span>
+<span class="text-secondary/60 w-32 shrink-0 select-none">2023-10-27 14:02:12</span>
+<span class="text-primary w-16 shrink-0 font-bold">INFO</span>
+<span class="text-on-surface/90">Payload received for user validation</span>
+</div>
+<div class="ml-60 mt-2 p-4 bg-surface-container-lowest rounded border border-outline-variant/10 text-xs text-on-surface-variant">
+<pre><code>{
+  <span class="text-secondary-fixed-dim">"request"</span>: {
+    <span class="text-secondary-fixed-dim">"method"</span>: <span class="text-primary">"POST"</span>,
+    <span class="text-secondary-fixed-dim">"path"</span>: <span class="text-primary">"/v1/auth/verify"</span>,
+    <span class="text-secondary-fixed-dim">"headers"</span>: {
+      <span class="text-secondary-fixed-dim">"content-type"</span>: <span class="text-primary">"application/json"</span>
+    }
+  },
+  <span class="text-secondary-fixed-dim">"status"</span>: <span class="text-primary-fixed-dim">200</span>
+}</code></pre>
+</div>
+</div>
+<!-- Error -->
+<div class="flex group hover:bg-error-container/10 transition-colors py-1 px-2 rounded -mx-2 bg-error-container/5">
+<span class="text-outline/40 w-12 shrink-0 select-none">1023</span>
+<span class="text-secondary/60 w-32 shrink-0 select-none">2023-10-27 14:02:15</span>
+<span class="text-error w-16 shrink-0 font-bold">ERROR</span>
+<div class="flex-grow text-error">
+Connection timeout in <span class="underline">auth-db-cluster-01</span>: operation timed out after 5000ms
+<div class="mt-1 text-xs opacity-80 italic">at internal/db/connector.go:142</div>
+</div>
+</div>
+<!-- Warning -->
+<div class="flex group hover:bg-surface-container-low transition-colors py-1 px-2 rounded -mx-2">
+<span class="text-outline/40 w-12 shrink-0 select-none">1024</span>
+<span class="text-secondary/60 w-32 shrink-0 select-none">2023-10-27 14:02:18</span>
+<span class="text-secondary w-16 shrink-0 font-bold uppercase">WARN</span>
+<div class="flex-grow text-on-surface/90">
+<span class="text-secondary-fixed-dim">memory_usage</span>: 82% |
+<span class="text-secondary-fixed-dim">node</span>: "worker-04" |
+<span class="text-secondary-fixed-dim">action</span>: "trigger_garbage_collection"
+</div>
+</div>
+<!-- More entries -->
+<div class="flex group hover:bg-surface-container-low transition-colors py-1 px-2 rounded -mx-2">
+<span class="text-outline/40 w-12 shrink-0 select-none">1025</span>
+<span class="text-secondary/60 w-32 shrink-0 select-none">2023-10-27 14:02:22</span>
+<span class="text-primary w-16 shrink-0 font-bold">INFO</span>
+<div class="flex-grow text-on-surface/90">Successfully drained connection pool for pod: <span class="text-primary-fixed-dim">ingress-7fb4</span></div>
+</div>
+<div class="flex group hover:bg-surface-container-low transition-colors py-1 px-2 rounded -mx-2">
+<span class="text-outline/40 w-12 shrink-0 select-none">1026</span>
+<span class="text-secondary/60 w-32 shrink-0 select-none">2023-10-27 14:02:25</span>
+<span class="text-primary w-16 shrink-0 font-bold">INFO</span>
+<div class="flex-grow text-on-surface/90">Metric aggregation complete for period <span class="text-primary-fixed-dim">T-5m</span></div>
+</div>
+
+<!-- Live events from status API will inject here -->
+<div id="live-log-entries"></div>
+
+<div class="mt-4 flex items-center gap-4 text-outline/30 select-none">
+<div class="h-px flex-grow bg-outline-variant/10"></div>
+<span class="text-[10px] font-bold tracking-[0.2em] uppercase">New logs arriving...</span>
+<div class="h-px flex-grow bg-outline-variant/10"></div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full h-10 flex justify-start items-center px-6 gap-8 bg-[#181c22] border-none shadow-[0_-4px_12px_rgba(0,0,0,0.5)] z-50">
+<div class="flex flex-row items-center gap-2 bg-[#262a31] text-[#1ce783] rounded-md px-3 py-1 cursor-default" id="footer-system-badge">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="text-[10px] font-semibold font-mono uppercase">System OK</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default transition-colors">
+<span class="material-symbols-outlined text-sm">speed</span>
+<span class="text-[10px] font-semibold font-mono uppercase">Latency: 24ms</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default transition-colors">
+<span class="material-symbols-outlined text-sm">dns</span>
+<span class="text-[10px] font-semibold font-mono uppercase">12 Node Cluster</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default transition-colors" id="connection-status">
+<span class="material-symbols-outlined text-sm">lan</span>
+<span class="text-[10px] font-semibold font-mono uppercase">Connected</span>
+</div>
+</footer>
+
+<!-- Log Analysis Sidebar -->
+<aside class="fixed right-6 top-24 bottom-16 w-80 hidden xl:flex flex-col gap-6 pointer-events-none">
+<div class="bg-surface-container-low/80 backdrop-blur-xl p-6 rounded-xl border border-outline-variant/10 shadow-2xl pointer-events-auto">
+<h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-outline mb-4">Anomalies Detected</h3>
+<div class="space-y-4" id="sidebar-anomalies">
+<div class="flex items-start gap-3">
+<div class="w-1 h-8 rounded bg-error shadow-[0_0_8px_#ffb4ab]"></div>
+<div><div class="text-xs font-bold text-on-surface">DB Connection Spike</div><div class="text-[10px] text-outline/80 font-mono mt-1">auth-db-01: +45% in 2m</div></div>
+</div>
+<div class="flex items-start gap-3">
+<div class="w-1 h-8 rounded bg-secondary shadow-[0_0_8px_#6ed5e3]"></div>
+<div><div class="text-xs font-bold text-on-surface">Memory Pressure</div><div class="text-[10px] text-outline/80 font-mono mt-1">worker-nodes: avg 84%</div></div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low/80 backdrop-blur-xl p-6 rounded-xl border border-outline-variant/10 shadow-2xl pointer-events-auto flex-grow">
+<h3 class="text-[10px] font-black uppercase tracking-[0.2em] text-outline mb-4">Log Volume (Last 15m)</h3>
+<div class="h-32 w-full flex items-end gap-1 px-1">
+<div class="w-2 bg-primary/20 h-[30%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-[45%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-[25%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-[60%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/40 h-[80%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-[55%] rounded-t-sm"></div>
+<div class="w-2 bg-error h-[95%] rounded-t-sm shadow-[0_0_10px_#ffb4ab]"></div>
+<div class="w-2 bg-primary/20 h-[40%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-[30%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-[20%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/20 h-[45%] rounded-t-sm"></div>
+<div class="w-2 bg-primary/60 h-[70%] rounded-t-sm animate-pulse"></div>
+</div>
+<div class="mt-4 flex justify-between text-[8px] font-mono text-outline uppercase">
+<span>13:45</span><span>Now</span>
+</div>
+</div>
+</aside>
+
+<script>
+    let lineNum = 1027;
+    async function pollLiveEvents() {
+        const conn = document.getElementById('connection-status');
+        try {
+            const res = await fetch('http://localhost:8090/status');
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            conn.innerHTML = `<span class="material-symbols-outlined text-sm">lan</span><span class="text-[10px] font-semibold font-mono uppercase">Connected</span>`;
+            conn.className = 'flex flex-row items-center gap-2 text-[#81ffac] px-3 py-1 cursor-default transition-colors';
+
+            const events = data.recent_events || [];
+            const container = document.getElementById('live-log-entries');
+            container.innerHTML = events.map(e => {
+                const t = new Date(e.timestamp * 1000).toLocaleTimeString('en-GB', {hour12:false});
+                const isErr = e.event_type === 'anomaly_detected';
+                const lvl = isErr ? 'ERROR' : 'INFO';
+                const lvlClass = isErr ? 'text-error' : 'text-primary';
+                const rowClass = isErr ? 'bg-error-container/5' : '';
+                const msg = e.data?.root_cause || e.data?.action_taken || e.event_type.replace(/_/g,' ');
+                lineNum++;
+                return `<div class="flex group hover:bg-surface-container-low transition-colors py-1 px-2 rounded -mx-2 ${rowClass}">
+                    <span class="text-outline/40 w-12 shrink-0 select-none">${lineNum}</span>
+                    <span class="text-secondary/60 w-32 shrink-0 select-none">${t}</span>
+                    <span class="${lvlClass} w-16 shrink-0 font-bold">${lvl}</span>
+                    <div class="flex-grow ${isErr ? 'text-error' : 'text-on-surface/90'}">[status-api] ${msg}</div>
+                </div>`;
+            }).join('');
+
+            // Update sidebar anomalies
+            const anomalies = events.filter(e => e.event_type === 'anomaly_detected');
+            if (anomalies.length > 0) {
+                const sidebar = document.getElementById('sidebar-anomalies');
+                sidebar.innerHTML = anomalies.map(a => `
+                    <div class="flex items-start gap-3">
+                        <div class="w-1 h-8 rounded bg-error shadow-[0_0_8px_#ffb4ab]"></div>
+                        <div><div class="text-xs font-bold text-on-surface">${a.data?.root_cause || 'Unknown'}</div>
+                        <div class="text-[10px] text-outline/80 font-mono mt-1">${a.data?.affected_service || '—'}</div></div>
+                    </div>`).join('');
+            }
+        } catch {
+            conn.innerHTML = `<span class="material-symbols-outlined text-sm">lan</span><span class="text-[10px] font-semibold font-mono uppercase">Disconnected</span>`;
+            conn.className = 'flex flex-row items-center gap-2 text-error px-3 py-1 cursor-default transition-colors';
+        }
+    }
+    setInterval(pollLiveEvents, 3000);
+    pollLiveEvents();
+</script>
+</body></html>

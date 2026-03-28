@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>JAEGERBOMB | Compute Nodes</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "outline-variant": "#3b4a3e","tertiary-fixed": "#ffdad7","on-surface-variant": "#bacbbb",
+                        "surface-bright": "#353940","outline": "#859586","on-primary-fixed": "#00210d",
+                        "surface-container-lowest": "#0a0e14","primary": "#81ffac",
+                        "on-primary-fixed-variant": "#00522a","on-tertiary-fixed": "#410005",
+                        "surface-container": "#1c2026","primary-fixed-dim": "#0fe380",
+                        "on-tertiary-container": "#ad001d","tertiary-fixed-dim": "#ffb3af",
+                        "surface-tint": "#0fe380","surface": "#10141a","surface-dim": "#10141a",
+                        "surface-container-highest": "#31353c","on-background": "#dfe2eb",
+                        "surface-container-low": "#181c22","error": "#ffb4ab","on-surface": "#dfe2eb",
+                        "on-error": "#690005","on-secondary-fixed": "#001f23",
+                        "on-secondary-container": "#002f34","inverse-surface": "#dfe2eb",
+                        "secondary-container": "#2c9eac","on-error-container": "#ffdad6",
+                        "inverse-primary": "#006d3a","secondary-fixed-dim": "#6ed5e3",
+                        "surface-variant": "#31353c","on-tertiary": "#68000d",
+                        "surface-container-high": "#262a31","on-tertiary-fixed-variant": "#930017",
+                        "on-primary-container": "#006233","on-primary": "#00391b",
+                        "error-container": "#93000a","tertiary-container": "#ffb8b4",
+                        "on-secondary-fixed-variant": "#004f57","tertiary": "#ffdedc",
+                        "secondary-fixed": "#90f1ff","background": "#10141a","secondary": "#6ed5e3",
+                        "primary-fixed": "#5dff9e","on-secondary": "#00363c",
+                        "inverse-on-surface": "#2d3137","primary-container": "#1ce783"
+                    },
+                    fontFamily: {"headline":["Inter"],"body":["Inter"],"label":["Inter"],"mono":["Geist Mono"]},
+                    borderRadius: {"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+        .mono-text { font-family: 'Geist Mono', monospace; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#10141a] border-none flex justify-between items-center px-6 py-3 max-w-none">
+<div class="flex items-center gap-8">
+<a href="index.html" class="text-xl font-black tracking-tighter text-[#1ce783] hover:opacity-80 transition-opacity">JAEGERBOMB</a>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-xs font-medium uppercase tracking-wider" href="index.html">Dashboard</a>
+<a class="text-[#1ce783] border-b-2 border-[#1ce783] pb-1 text-xs font-medium uppercase tracking-wider" href="nodes.html">Nodes</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-xs font-medium uppercase tracking-wider" href="logs.html">Logs</a>
+<a class="text-slate-400 hover:text-slate-200 transition-colors text-xs font-medium uppercase tracking-wider" href="alerts.html">Alerts</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">search</span>
+<input class="bg-surface-container-lowest border-none rounded-md pl-10 pr-4 py-1.5 text-xs focus:ring-1 focus:ring-primary w-64" placeholder="Search nodes..." type="text">
+</div>
+<button class="text-slate-400 hover:bg-[#262a31] transition-all duration-200 p-2 rounded-md active:scale-95"><span class="material-symbols-outlined">settings</span></button>
+<button class="text-slate-400 hover:bg-[#262a31] transition-all duration-200 p-2 rounded-md active:scale-95"><span class="material-symbols-outlined">account_circle</span></button>
+</div>
+</header>
+
+<main class="pt-20 pb-16 px-6 max-w-none">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8">
+<div>
+<h1 class="text-2xl font-bold tracking-tight text-on-surface mb-1">Compute Nodes</h1>
+<p class="text-slate-500 text-sm mono-text">Cluster ID: us-east-production-04</p>
+</div>
+<div class="flex gap-3">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low rounded-lg" id="health-badge">
+<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#81ffac]"></div>
+<span class="text-xs font-bold uppercase tracking-widest text-primary">System Healthy</span>
+</div>
+<button class="bg-surface-container-high hover:bg-surface-bright text-on-surface px-4 py-1.5 rounded-md text-xs font-semibold transition-all">MANAGE FLEET</button>
+</div>
+</div>
+
+<!-- Node Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+<!-- Node Card 1 -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high transition-all duration-300">
+<div class="flex justify-between items-start mb-6">
+<div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-8821-ax</h3></div>
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU LOAD</span><span class="text-primary">42.4%</span></div>
+<div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary/20 h-[30%]"></div><div class="w-full bg-primary/20 h-[45%]"></div><div class="w-full bg-primary/20 h-[40%]"></div><div class="w-full bg-primary/20 h-[55%]"></div><div class="w-full bg-primary h-[42%]"></div></div></div>
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">8.2 GB / 16 GB</span></div>
+<div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[51%]"></div></div></div>
+</div>
+</div>
+<!-- Node Card 2 (Warning) -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high transition-all duration-300">
+<div class="flex justify-between items-start mb-6">
+<div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-secondary-fixed-dim">node-1042-ql</h3></div>
+<span class="material-symbols-outlined text-secondary-fixed-dim text-lg">warning</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU LOAD</span><span class="text-secondary-fixed-dim">88.1%</span></div>
+<div class="h-8 flex items-end gap-0.5"><div class="w-full bg-secondary-fixed-dim/20 h-[70%]"></div><div class="w-full bg-secondary-fixed-dim/20 h-[75%]"></div><div class="w-full bg-secondary-fixed-dim/20 h-[92%]"></div><div class="w-full bg-secondary-fixed-dim/20 h-[85%]"></div><div class="w-full bg-secondary-fixed-dim h-[88%] shadow-[0_0_8px_rgba(110,213,227,0.3)]"></div></div></div>
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">14.1 GB / 16 GB</span></div>
+<div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-secondary-fixed-dim w-[88%]"></div></div></div>
+</div>
+</div>
+<!-- Node Card 3 -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high transition-all duration-300">
+<div class="flex justify-between items-start mb-6">
+<div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-0912-zz</h3></div>
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU LOAD</span><span class="text-primary">12.0%</span></div>
+<div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary/20 h-[10%]"></div><div class="w-full bg-primary/20 h-[15%]"></div><div class="w-full bg-primary h-[12%]"></div></div></div>
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">DISK I/O</span><span class="text-primary">2.1 MB/s</span></div>
+<div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[14%]"></div></div></div>
+</div>
+</div>
+<!-- Node Card 4 -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high transition-all duration-300">
+<div class="flex justify-between items-start mb-6">
+<div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-4412-mx</h3></div>
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU LOAD</span><span class="text-primary">34.9%</span></div>
+<div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary/20 h-[30%]"></div><div class="w-full bg-primary h-[34%]"></div></div></div>
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">4.4 GB / 16 GB</span></div>
+<div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[27%]"></div></div></div>
+</div>
+</div>
+<!-- Node 5 -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-6"><div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-2231-va</h3></div><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div class="space-y-4"><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU</span><span class="text-primary">08.2%</span></div><div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary h-[8%]"></div></div></div><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">NET OUT</span><span class="text-primary">124 kb/s</span></div><div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[8%]"></div></div></div></div>
+</div>
+<!-- Node 6 -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-6"><div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-9901-tx</h3></div><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div class="space-y-4"><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU</span><span class="text-primary">56.1%</span></div><div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary h-[56%]"></div></div></div><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">DISK</span><span class="text-primary">92%</span></div><div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[92%]"></div></div></div></div>
+</div>
+<!-- Node 7 (Error) -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high transition-all duration-300 border-l-2 border-error">
+<div class="flex justify-between items-start mb-6">
+<div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-error">node-5562-ca</h3></div>
+<span class="material-symbols-outlined text-error text-lg">error</span>
+</div>
+<div class="space-y-4">
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU LOAD</span><span class="text-error">99.4%</span></div>
+<div class="h-8 flex items-end gap-0.5"><div class="w-full bg-error h-[99%] shadow-[0_0_8px_#ffb4ab]"></div></div></div>
+<div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">LATENCY</span><span class="text-error">240ms</span></div>
+<div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-error w-[100%]"></div></div></div>
+</div>
+</div>
+<!-- Node 8-12 -->
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-6"><div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-1182-or</h3></div><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div class="space-y-4"><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU</span><span class="text-primary">22.0%</span></div><div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary h-[22%]"></div></div></div><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">2.1 GB</span></div><div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[12%]"></div></div></div></div>
+</div>
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-6"><div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-0032-wa</h3></div><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div class="space-y-4"><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU</span><span class="text-primary">15.4%</span></div><div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary h-[15%]"></div></div></div><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">1.2 GB</span></div><div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[8%]"></div></div></div></div>
+</div>
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-6"><div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-7712-fl</h3></div><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div class="space-y-4"><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU</span><span class="text-primary">44.8%</span></div><div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary h-[44%]"></div></div></div><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">9.4 GB</span></div><div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[55%]"></div></div></div></div>
+</div>
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-6"><div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-3321-ga</h3></div><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div class="space-y-4"><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU</span><span class="text-primary">12.9%</span></div><div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary h-[12%]"></div></div></div><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">1.8 GB</span></div><div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[10%]"></div></div></div></div>
+</div>
+<div class="bg-surface-container-low p-5 group hover:bg-surface-container-high">
+<div class="flex justify-between items-start mb-6"><div><span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1 block">Instance</span><h3 class="mono-text text-sm font-semibold text-primary">node-4491-nc</h3></div><span class="material-symbols-outlined text-primary text-lg">check_circle</span></div>
+<div class="space-y-4"><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">CPU</span><span class="text-primary">31.2%</span></div><div class="h-8 flex items-end gap-0.5"><div class="w-full bg-primary h-[31%]"></div></div></div><div class="space-y-2"><div class="flex justify-between text-[10px] mono-text"><span class="text-slate-400">MEMORY</span><span class="text-primary">6.1 GB</span></div><div class="h-1.5 w-full bg-surface-container-lowest overflow-hidden"><div class="h-full bg-primary w-[35%]"></div></div></div></div>
+</div>
+</div>
+</main>
+
+<!-- BottomNavBar -->
+<footer class="fixed bottom-0 left-0 w-full h-10 flex justify-start items-center px-6 gap-8 bg-[#10141a] border-none shadow-[0_-4px_12px_rgba(0,0,0,0.5)] z-50">
+<div class="flex flex-row items-center gap-2 bg-[#262a31] text-[#1ce783] rounded-md px-3 py-1" id="footer-system-badge">
+<span class="material-symbols-outlined text-xs">check_circle</span>
+<span class="mono-text text-[10px] font-semibold uppercase">System OK</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default">
+<span class="material-symbols-outlined text-xs">speed</span>
+<span class="mono-text text-[10px] font-semibold uppercase">Latency: 24ms</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default">
+<span class="material-symbols-outlined text-xs">dns</span>
+<span class="mono-text text-[10px] font-semibold uppercase">12 Node Cluster</span>
+</div>
+<div class="flex flex-row items-center gap-2 text-slate-500 px-3 py-1 hover:text-[#81ffac] cursor-default" id="connection-status">
+<span class="material-symbols-outlined text-xs">lan</span>
+<span class="mono-text text-[10px] font-semibold uppercase">Connected</span>
+</div>
+</footer>
+
+<script>
+    async function pollStatus() {
+        const badge = document.getElementById('health-badge');
+        const conn = document.getElementById('connection-status');
+        try {
+            const res = await fetch('http://localhost:8090/status');
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            conn.innerHTML = `<span class="material-symbols-outlined text-xs">lan</span><span class="mono-text text-[10px] font-semibold uppercase">Connected</span>`;
+            conn.className = 'flex flex-row items-center gap-2 text-[#81ffac] px-3 py-1 cursor-default';
+            if (!data.system_healthy) {
+                badge.innerHTML = `<div class="w-2 h-2 rounded-full bg-error shadow-[0_0_8px_#ffb4ab] animate-pulse"></div><span class="text-xs font-bold uppercase tracking-widest text-error">Anomaly Detected</span>`;
+            } else {
+                badge.innerHTML = `<div class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#81ffac]"></div><span class="text-xs font-bold uppercase tracking-widest text-primary">System Healthy</span>`;
+            }
+        } catch {
+            conn.innerHTML = `<span class="material-symbols-outlined text-xs">lan</span><span class="mono-text text-[10px] font-semibold uppercase">Disconnected</span>`;
+            conn.className = 'flex flex-row items-center gap-2 text-error px-3 py-1 cursor-default';
+        }
+    }
+    setInterval(pollStatus, 3000);
+    pollStatus();
+</script>
+</body></html>
